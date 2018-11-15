@@ -28,35 +28,41 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
-        <FlatList style={{ marginTop: 20 }}
-          data={photos}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) =>
-            <View>
+      <FlatList style={styles.container}
+        data={photos}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) =>
+          <View>
+            <View style={styles.header}>
+              <Image source={require('./resources/img/mx.jpg')} style={styles.profileImage} />
               <Text>{item.name}</Text>
-              <Image source={require('./resources/img/mx.jpg')} style={{ width: width, height: width }} />
             </View>
-          }
-        />
+            <Image source={require('./resources/img/mx.jpg')} style={styles.photo} />
+          </View>
+        }
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    marginTop: 20
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
+  header: {
     margin: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  profileImage: {
+    marginRight: 10,
+    borderRadius: 20,
+    width: 40,
+    height: 40
   },
+  photo: {
+    width,
+    height: width
+  }
+
 });
