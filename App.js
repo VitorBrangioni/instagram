@@ -8,6 +8,7 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
+import Post from './src/components/Post';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -32,13 +33,7 @@ export default class App extends Component<Props> {
         data={photos}
         keyExtractor={item => item.id}
         renderItem={({ item }) =>
-          <View>
-            <View style={styles.header}>
-              <Image source={require('./resources/img/mx.jpg')} style={styles.profileImage} />
-              <Text>{item.name}</Text>
-            </View>
-            <Image source={require('./resources/img/mx.jpg')} style={styles.photo} />
-          </View>
+          <Post photo={item}/>
         }
       />
     );
@@ -59,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 40,
     height: 40
-  },
+  }, 
   photo: {
     width,
     height: width
