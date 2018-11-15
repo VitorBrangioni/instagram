@@ -19,19 +19,28 @@ const instructions = Platform.select({
 
 const width = Dimensions.get('screen').width;
 
-const photos = [
-  { id: '1', name: 'Vitor Brangioni' },
-  { id: '2', name: 'Jonny' },
-  { id: '3', name: 'Joaca' },
-];
-
 type Props = {};
 export default class App extends Component<Props> {
+
+  constructor() {
+    super();
+    this.state = {
+      photos: []
+    }
+  }
+  
+  componentDidMount() {
+    fetch('https://instalura-api.herokuapp.com/api/public/fotos/rafael')
+      .then(res => res.json())
+      .then(photos => this.setState({ photos }))
+      .catch(err => console.warn('houve erro'))
+  }
+
   render() {
     return (
       <FlatList style={styles.container}
-        data={photos}
-        keyExtractor={item => item.id}
+        data={this.state.photos}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) =>
           <Post photo={item}/>
         }

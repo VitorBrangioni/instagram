@@ -25,8 +25,8 @@ export default class App extends Component<Props> {
         return (
             <View>
                 <View style={styles.header}>
-                    <Image source={require('../../resources/img/mx.jpg')} style={styles.profileImage} />
-                    <Text>{this.props.photo.name}</Text>
+                    <Image source={{uri: this.props.photo.urlPerfil}} style={styles.profileImage} />
+                    <Text>{this.props.photo.loginUsuario}</Text>
                 </View>
                 <Image source={require('../../resources/img/mx.jpg')} style={styles.photo} />
             </View>
