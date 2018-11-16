@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList, TextInput } from 'react-native';
 import InputCommentary from './InputCommentary';
 import Commentaries from './Commentaries';
+import Like from './Like';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -84,6 +85,32 @@ export default class Post extends Component<Props> {
         );
     }
 
+    like() {
+        const { photo } = this.state;
+
+        let likers = [];
+        if (!photo.likeada) {
+            likers = [
+                ...photo.likers,
+                { login: 'VitorBrangioni' }
+            ]
+        } else {
+            likers = photo.likers.filter(like => {
+
+                if (like.login !== 'VitorBrangioni') {
+                    return like;
+                }
+            })
+        }
+
+        const fotoAtualizada = {
+            ...photo,
+            likers,
+            likeada: !photo.likeada
+        }
+        this.setState({ photo: fotoAtualizada });
+    }
+
     showLegend(photo) {
         if (!photo.comentario)
             return null;
@@ -112,10 +139,8 @@ export default class Post extends Component<Props> {
                 </View>
                 <Image source={{ uri: photo.urlFoto }} style={styles.photo} />
                 <View style={styles.footer}>
-                    <TouchableOpacity onPress={this.like.bind(this)}>
-                        <Image style={styles.likeBtn}
-                            source={this.carregaIcone(photo.likeada)} />
-                    </TouchableOpacity>
+                    <Like photo={photo} likeCallback={this.like.bind(this)} />
+                    
                     {this.showLikes(photo.likers)}
                     {this.showLegend(photo)}
 
