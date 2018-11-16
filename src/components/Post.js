@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,14 +21,42 @@ const width = Dimensions.get('screen').width;
 type Props = {};
 
 export default class App extends Component<Props> {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            photo: this.props.photo
+        }
+    }
+
+    like() {
+        const fotoAtualizada = {
+            ...this.state.photo,
+            likeada: !this.state.photo.likeada
+        }
+        this.setState({photo: fotoAtualizada});
+    }
+
+    carregaIcone(likeada) {
+        return likeada ? require('../../resources/img/s2-checked.png') : 
+            require('../../resources/img/s2.png')
+    }
+    
     render() {
+        const { photo } = this.state;
         return (
             <View>
                 <View style={styles.header}>
-                    <Image source={{uri: this.props.photo.urlPerfil}} style={styles.profileImage} />
-                    <Text>{this.props.photo.loginUsuario}</Text>
+                    <Image source={{ uri: photo.urlPerfil }} style={styles.profileImage} />
+                    <Text>{photo.loginUsuario}</Text>
                 </View>
-                <Image source={require('../../resources/img/mx.jpg')} style={styles.photo} />
+                <Image source={{uri: photo.urlFoto}} style={styles.photo} />
+                <View style={styles.footer}>
+                    <TouchableOpacity onPress={this.like.bind(this)}>
+                        <Image style={styles.likeBtn}
+                            source={this.carregaIcone(photo.likeada)} />
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -52,6 +80,13 @@ const styles = StyleSheet.create({
     photo: {
         width,
         height: width
+    },
+    likeBtn: {
+        height: 40,
+        width: 40,
+    },
+    footer: {
+        margin: 10
     }
 
 });
