@@ -29,6 +29,18 @@ export default class App extends Component<Props> {
         }
     }
 
+    addCommentary() {
+        const comentarios = [...this.state.photo.comentarios, {
+            id: this.state.commentaryValue,
+            login: 'VitorBrangioni',
+            texto: this.state.commentaryValue
+        }];
+        const photo = {...this.state.photo, comentarios };
+
+        this.setState({ photo, commentaryValue: '' });
+        this.inputCommentary.clear();
+    }
+
     like() {
 
         const { photo } = this.state;
@@ -112,9 +124,11 @@ export default class App extends Component<Props> {
                         }
                     />
                     <View style={styles.row}>
-                        <TextInput style={styles.input} placeholder="Adicione um comentário" />
-                        <Image style={styles.btnSend}
+                        <TextInput style={styles.input} onChangeText={commentaryValue => this.setState({ commentaryValue })} ref={input => this.inputCommentary = input} placeholder="Adicione um comentário" />
+                        <TouchableOpacity onPress={this.addCommentary.bind(this)}>
+                            <Image style={styles.btnSend}
                                 source={require('./../../resources/img/send-icon.jpg')} />
+                        </TouchableOpacity>
                     </View>
 
                 </View>
