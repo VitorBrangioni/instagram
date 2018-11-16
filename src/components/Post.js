@@ -8,6 +8,8 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import InputCommentary from './InputCommentary';
+import Commentaries from './Commentaries';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -16,11 +18,12 @@ const instructions = Platform.select({
         'Shake or press menu button for dev menu',
 });
 
+const margin = Platform.OS === 'ios' ? 20 : 0;
 const width = Dimensions.get('screen').width;
 
 type Props = {};
 
-export default class App extends Component<Props> {
+export default class Post extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -29,16 +32,19 @@ export default class App extends Component<Props> {
         }
     }
 
-    addCommentary() {
+    addCommentary(commentaryValue, inputCommentary) {
+        if (commentaryValue === '') 
+            return;
+
         const comentarios = [...this.state.photo.comentarios, {
-            id: this.state.commentaryValue,
+            id: commentaryValue,
             login: 'VitorBrangioni',
-            texto: this.state.commentaryValue
+            texto: commentaryValue
         }];
         const photo = {...this.state.photo, comentarios };
 
-        this.setState({ photo, commentaryValue: '' });
-        this.inputCommentary.clear();
+        this.setState({ photo });
+        inputCommentary.clear();
     }
 
     like() {
@@ -113,23 +119,8 @@ export default class App extends Component<Props> {
                     {this.showLikes(photo.likers)}
                     {this.showLegend(photo)}
 
-                    <FlatList
-                        data={photo.comentarios}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => 
-                            <View style={styles.comentario}>
-                                <Text style={styles.tituloComentario}>{item.login}</Text>
-                                <Text>{item.texto}</Text>
-                            </View>
-                        }
-                    />
-                    <View style={styles.row}>
-                        <TextInput style={styles.input} onChangeText={commentaryValue => this.setState({ commentaryValue })} ref={input => this.inputCommentary = input} placeholder="Adicione um comentário" />
-                        <TouchableOpacity onPress={this.addCommentary.bind(this)}>
-                            <Image style={styles.btnSend}
-                                source={require('./../../resources/img/send-icon.jpg')} />
-                        </TouchableOpacity>
-                    </View>
+                    <Commentaries comentarios={photo.comentarios} />
+                    <InputCommentary commentaryCallback={this.addCommentary.bind(this)}/>
 
                 </View>
             </View>
@@ -139,7 +130,7 @@ export default class App extends Component<Props> {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20
+        marginTop: margin
     },
     header: {
         margin: 10,
@@ -167,25 +158,15 @@ const styles = StyleSheet.create({
     footer: {
         margin: 10
     },
-    comentario: {
-        flexDirection: 'row'
-    },
     tituloComentario: {
         fontWeight: 'bold',
         marginRight: 5
     },
-    input: {
-        height: 40,
-        flex: 1,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-    btnSend: {
-        width: 35,
-        height: 35
-    },
     row: {
         flexDirection: 'row'
-    }
+    },
+    comentario: {
+        flexDirection: 'row'
+    },
 
 });
